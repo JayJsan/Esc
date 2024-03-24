@@ -12,6 +12,7 @@ public class Bouncy : Ability
     [SerializeField] private string abilityDescription = "This ability allows the player to bounce off the ground.";
     [SerializeField] private float abilityCooldown = 3f;
     [SerializeField] private float abilityDuration = 5f;
+    [SerializeField] private float newGravity = 0.5f;
     
     [SerializeField] private float bounceForce = 15f;
     [SerializeField] private PhysicsMaterial2D bouncyMaterial;
