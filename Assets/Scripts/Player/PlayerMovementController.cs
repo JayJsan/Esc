@@ -7,12 +7,13 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Movement Configuration")]
     public float moveSpeed = 5f;
     public float groundRayCheckDistance = 0.2f;
+    public float velocityCap = 10f;
     [Header("Jump Configuration")]
     [Range(1, 20)]
-    public float jumpVelocity;
-    public float fallMultiplier = 2.5f;
-    public float lowJumpMultiplier = 2f;
-    public float playerDownFallMultiplier = 4f; // this is the multiplier for when the player presses down while in the air
+    public float jumpVelocity; // The velocity of the jump
+    public float fallMultiplier = 2.5f; // Multiplier for the second half of the arc of the jump (when the player is falling)
+    public float lowJumpMultiplier = 2f; // Multiplier for the first half of the arc of the jump (when the player is going up)
+    public float playerDownFallMultiplier = 4f; // Multiplier for when the player presses down while in the air
 
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
@@ -29,9 +30,11 @@ public class PlayerMovementController : MonoBehaviour
     #endregion
 
     #region Physics Variables
-    private float jumpVelocityCalculation = 0;
-    private float fallVelocityCalculation = 0;
-    private float playerDownFallVelocityCalculation = 0;
+    private float jumpVelocityCalculation = 0; 
+    private float fallVelocityCalculation = 0; 
+    private float playerDownFallVelocityCalculation = 0; 
+    private bool disableVelocityReset = false;
+
     #endregion
 
     #region Check State Variables
@@ -65,6 +68,11 @@ public class PlayerMovementController : MonoBehaviour
         jumpVelocityCalculation = Physics2D.gravity.y * (fallMultiplier - 1);
         fallVelocityCalculation = Physics2D.gravity.y * (lowJumpMultiplier - 1);
         playerDownFallVelocityCalculation = Physics2D.gravity.y * (playerDownFallMultiplier - 1);
+
+        if (rb.velocity.magnitude > velocityCap)
+        {
+            rb.velocity = rb.velocity.normalized * velocityCap;
+        }
     }
 
     void FixedUpdate()
@@ -77,7 +85,13 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Move()
     {
-        rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+        if (disableMovementInput) return;
+        
+        if (disableVelocityReset) 
+            rb.velocity = new Vector2(rb.velocity.x + horizontalInput * moveSpeed, rb.velocity.y);
+        else
+            rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+
         FlipPlayer();
     }
 
@@ -159,6 +173,11 @@ public class PlayerMovementController : MonoBehaviour
     public void ToggleJumpAbility(bool isActive)
     {
         disableJumpInput = isActive;
+    }
+
+    public void ToggleVelocityReset(bool isActive)
+    {
+        disableVelocityReset = isActive;
     }
 
     private void GetInput()
