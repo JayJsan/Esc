@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnvironmentProjectile : MonoBehaviour, IDamager
+public class EnvironmentProjectile : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
@@ -25,17 +25,16 @@ public class EnvironmentProjectile : MonoBehaviour, IDamager
         IDamagable damagable = other.GetComponent<IDamagable>();
         if (damagable != null)
         {
-            DealDamage(damagable);
+            damagable.TakeDamage(projectileDamage);
+            // get direction from projectile to player
+            Vector2 direction = (Vector2)other.transform.position - rb.position;
+            damagable.TakeKnockback(10f, direction);
+
             if (gameObject != null)
                 Destroy(this);
         }    
     }
-
-    public void DealDamage(IDamagable target)
-    {
-        target.TakeDamage(projectileDamage);
-    }
-
+    
     public int GetDamage()
     {
         return projectileDamage;
