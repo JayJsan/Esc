@@ -70,35 +70,62 @@ public class PlayerAbilityController : MonoBehaviour
         {
             earthDashAbility.Execute();
             StartCoroutine(AbilityTimer(earthDashAbility.GetAbilityDuration(), earthDashAbility.GetAbilityCooldown(), Abilities.Earth));
+            StartCoroutine(PlayerUseAbilityTimer(earthDashAbility.GetAbilityDuration()));
         }
         else if (abilityStates[Abilities.Water] == AbilityState.Ready && abilitiesUnlocked.Contains(Abilities.Water) && Input.GetKeyDown(fishAbilityKey))
         {
             fishAbility.Execute();
             StartCoroutine(AbilityTimer(fishAbility.GetAbilityDuration(), fishAbility.GetAbilityCooldown(), Abilities.Water));
+            StartCoroutine(PlayerUseAbilityTimer(fishAbility.GetAbilityDuration()));
         }
         else if (abilityStates[Abilities.Fire] == AbilityState.Ready && abilitiesUnlocked.Contains(Abilities.Fire) && Input.GetKeyDown(flameSuitAbilityKey))
         {
             flameSuitAbility.Execute();
             StartCoroutine(AbilityTimer(flameSuitAbility.GetAbilityDuration(), flameSuitAbility.GetAbilityCooldown(), Abilities.Fire));
+            StartCoroutine(PlayerUseAbilityTimer(flameSuitAbility.GetAbilityDuration()));
         }
         else if (abilityStates[Abilities.Air] == AbilityState.Ready && abilitiesUnlocked.Contains(Abilities.Air) && Input.GetKeyDown(airBurstAbilityKey))
         {
             airBurstAbility.Execute();
             StartCoroutine(AbilityTimer(airBurstAbility.GetAbilityDuration(), airBurstAbility.GetAbilityCooldown(), Abilities.Air));
+            StartCoroutine(PlayerUseAbilityTimer(airBurstAbility.GetAbilityDuration()));
         }
     }
 
     private IEnumerator AbilityTimer(float duration, float cooldown, Abilities ability)
     {
-        playerAbilityUseState = PlayerAbilityUseState.Executing;
         abilityStates[ability] = AbilityState.Executing;
+
+        Debug.Log("Ability: " + ability + " is executing");
+        
+        yield return new WaitForSeconds(duration);
+
+        abilityStates[ability] = AbilityState.Cooldown;
+
+        Debug.Log("Ability: " + ability + " is on cooldown");
+
+        yield return new WaitForSeconds(cooldown);
+
+        Debug.Log("Ability: " + ability + " is ready");
+
+        abilityStates[ability] = AbilityState.Ready;
+    }
+
+    /// <summary>
+    /// Player should not be able to use any other abilities while an ability isexecuting
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    private IEnumerator PlayerUseAbilityTimer(float duration)
+    {
+        playerAbilityUseState = PlayerAbilityUseState.Executing;
+
+        Debug.Log("Player is executing ability");
         
         yield return new WaitForSeconds(duration);
 
         playerAbilityUseState = PlayerAbilityUseState.Ready;
-        abilityStates[ability] = AbilityState.Cooldown;
 
-        yield return new WaitForSeconds(cooldown);
-
+        Debug.Log("Player is Ready");
     }
 }
