@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovementController : MonoBehaviour
+public class PlayerLandMovementController : MonoBehaviour
 {
     [Header("Movement Configuration")]
     public float moveSpeed = 5f;
