@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attractor : MonoBehaviour
+public class EvilKeyPiece : MonoBehaviour
 {
     [Header("References")]
     public Transform target;
@@ -11,6 +11,8 @@ public class Attractor : MonoBehaviour
     public bool randomiseDirectionSpread = false;
     public float spreadAngle = 0f;
     public float speed = 20f;
+    public int damage = 1;
+    public float knockbackForce = 10f;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,5 +33,20 @@ public class Attractor : MonoBehaviour
         direction.Normalize();
         Vector2 force = direction * speed;
         rb.AddForce(force);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damage);
+                // get direction from key piece to player
+                Vector2 direction = (Vector2)other.transform.position - rb.position;
+                playerHealth.TakeKnockback(knockbackForce, direction);
+            }
+        }
     }
 }

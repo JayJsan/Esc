@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public enum NPCState
@@ -83,7 +84,7 @@ public class NPCAIController : MonoBehaviour
     {
         if (target != null)
         {
-            // Attack the target
+            
         }
     }
 
