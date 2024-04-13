@@ -5,18 +5,22 @@ using UnityEngine;
 public class EvilKeyPiece : MonoBehaviour
 {
     [Header("References")]
-    public Transform target;
-    public Rigidbody2D rb;
+    [SerializeField] private Transform target;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private EnemyHealth health;
     [Header("Configuration")]
-    public bool randomiseDirectionSpread = false;
-    public float spreadAngle = 0f;
-    public float speed = 20f;
-    public int damage = 1;
-    public float knockbackForce = 10f;
+    [SerializeField] private bool randomiseDirectionSpread = false;
+    [SerializeField] private float spreadAngle = 0f;
+    [SerializeField] private float speed = 20f;
+    [SerializeField] private int damage = 1;
+    [SerializeField] private float knockbackForce = 10f;
+    // ========== Private Variables ==========
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        health = GetComponent<EnemyHealth>();
     }
 
     // Update is called once per frame
@@ -37,6 +41,8 @@ public class EvilKeyPiece : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (health.IsDead()) return;
+
         if (other.gameObject.CompareTag("Player"))
         {
             PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();

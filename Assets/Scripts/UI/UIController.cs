@@ -25,7 +25,7 @@ public class UIController : MonoBehaviour
 
     public void UpdateHealthText()
     {
-        healthText.text = "Health: " + playerHealth.GetHealth();
+        healthText.text = "Lives: " + playerHealth.GetHealth();
     }
 
     public void SetPlayerHealth(PlayerHealth health)
