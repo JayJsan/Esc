@@ -220,6 +220,12 @@ namespace Bundos.WaterSystem
 
                 Ripple(contactPoint, false);
             }
+
+            EnvironmentEntityState entity = other.GetComponent<EnvironmentEntityState>();
+            if (entity != null)
+            {
+                entity.SetEnvironmentState(EntityEnvironmentType.Water);
+            }
         }
 
         void OnTriggerExit2D(Collider2D other)
@@ -232,6 +238,12 @@ namespace Bundos.WaterSystem
             {
                 Vector2 contactPoint = other.ClosestPoint(transform.position);
                 Ripple(contactPoint, true);
+            }
+
+            EnvironmentEntityState entity = other.GetComponent<EnvironmentEntityState>();
+            if (entity != null)
+            {
+                entity.SetEnvironmentState(EntityEnvironmentType.Land);
             }
         }
     }

@@ -2,30 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public enum PlayerAreaState
-{
-    Land,
-    Water
-}
-
-public enum PlayerLandMovementState
-{
-    Idle,
-    Walking,
-    Jumping,
-    Falling,
-}
-
-public enum PlayerWaterMovementState
-{
-    Idle,
-    Swimming,
-    Diving,
-}
-
 [RequireComponent(typeof(PlayerLandMovementController))]
 [RequireComponent(typeof(PlayerWaterMovementController))]
+[RequireComponent(typeof(EnvironmentEntityState))]
 public class PlayerMovementStateController : MonoBehaviour
 {
     public static PlayerMovementStateController Instance { get; private set; }
@@ -33,19 +12,19 @@ public class PlayerMovementStateController : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerLandMovementController playerLandMovementController;
     [SerializeField] private PlayerWaterMovementController playerWaterMovementController;
+    [SerializeField] private EnvironmentEntityState environmentEntityState;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Collider2D playerCollider;
 
     // ============ Private Variables ============
-    private PlayerAreaState playerAreaState = PlayerAreaState.Land;
-    private PlayerLandMovementState playerLandMovementState = PlayerLandMovementState.Idle;
-    private PlayerWaterMovementState playerWaterMovementState = PlayerWaterMovementState.Idle;
+    private PlayerPhysicalState currentPhysicalState = PlayerPhysicalState.Normal;
 
     // Start is called before the first frame update
     void Start()
     {
         playerLandMovementController = GetComponent<PlayerLandMovementController>();
         playerWaterMovementController = GetComponent<PlayerWaterMovementController>();
+        environmentEntityState = GetComponent<EnvironmentEntityState>();
 
         if (Instance == null)
         {
@@ -57,34 +36,84 @@ public class PlayerMovementStateController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateState(Component sender, object data)
     {
-        HandleState();
-    }
-
-    private void HandleState()
-    {
-        switch (playerAreaState)
+        Debug.Log("UpdateState");
+        if (data is int)
         {
-            case PlayerAreaState.Land:
-                HandleLandMovementState();
-                break;
-            case PlayerAreaState.Water:
-                HandleWaterMovementState();
-                break;
+            int entityID = (int)data;
+            if (entityID == environmentEntityState.entityID)
+            {
+                switch (environmentEntityState.GetCurrentState())
+                {
+                    case EntityEnvironmentType.Land:
+                        HandleLandMovementState();
+                        break;
+                    case EntityEnvironmentType.Water:
+                        HandleWaterMovementState();
+                        break;
+                }
+            }
         }
     }
 
+    public void UpdatePlayerPhysicalState(Component sender, object data)
+    {
+        if (data is bool)
+        {
+            bool isFish = (bool)data;
+            if (isFish)
+            {
+                currentPhysicalState = PlayerPhysicalState.Fish;
+            }
+            else
+            {
+                currentPhysicalState = PlayerPhysicalState.Normal;
+            }
+
+            switch (environmentEntityState.GetCurrentState())
+                {
+                    case EntityEnvironmentType.Land:
+                        HandleLandMovementState();
+                        break;
+                    case EntityEnvironmentType.Water:
+                        HandleWaterMovementState();
+                        break;
+                }
+        }
+    }
+
+
     private void HandleLandMovementState()
     {
-        playerLandMovementController.enabled = true;
-        playerWaterMovementController.enabled = false;
+        if (currentPhysicalState == PlayerPhysicalState.Normal)
+        {
+            playerLandMovementController.enabled = true;
+            playerWaterMovementController.enabled = false;
+        }
+        else
+        {
+            playerLandMovementController.enabled = false;
+            playerWaterMovementController.enabled = true;
+        }
     }
 
     private void HandleWaterMovementState()
     {
-        playerLandMovementController.enabled = false;
-        playerWaterMovementController.enabled = true;
+        if (currentPhysicalState == PlayerPhysicalState.Normal)
+        {
+            playerLandMovementController.enabled = false;
+            playerWaterMovementController.enabled = true;
+        }
+        else
+        {
+            playerLandMovementController.enabled = false;
+            playerWaterMovementController.enabled = true;
+        }
+    }
+
+    public EntityEnvironmentType GetCurrentEnvironmentState()
+    {
+        return environmentEntityState.GetCurrentState();
     }
 }
