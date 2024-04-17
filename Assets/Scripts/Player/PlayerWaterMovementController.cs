@@ -25,6 +25,7 @@ public class PlayerWaterMovementController : MonoBehaviour
     private EntityEnvironmentType currentEnvironmentState;
     private Vector2 input;
     private bool dashInput;
+    private bool canMove = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +41,13 @@ public class PlayerWaterMovementController : MonoBehaviour
 
     private void Update()
     {
-        GetInputs();
+        if (canMove)
+            GetInputs();
+        else
+        {
+            input = Vector2.zero;
+            dashInput = false;
+        }
     }
 
     private void FixedUpdate()
@@ -95,6 +102,7 @@ public class PlayerWaterMovementController : MonoBehaviour
 
     private void HandleNormalState()
     {
+        canMove = true;
         // Handle normal movement
         // return to normal speed, gravity, drag
         rb.gravityScale = 1;
@@ -104,6 +112,7 @@ public class PlayerWaterMovementController : MonoBehaviour
 
     private void HandleFishState()
     {
+        canMove = true;
         // Handle fish movement underwater
         // increase drag, decrease gravity, increase speed
         rb.gravityScale = 0.25f;
@@ -113,11 +122,12 @@ public class PlayerWaterMovementController : MonoBehaviour
 
     private void HandleFishOnLand()
     {
+        canMove = false;
         // Handle fish movement on land
         // increase speed, decrease gravity, increase drag
         rb.gravityScale = 1f;
-        rb.drag = 0;
-        rb.mass = 0.5f;
+        rb.drag = 0.25f;
+        rb.mass = 4f;
     }
 
     public void UpdateState(Component sender, object data)
