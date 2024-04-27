@@ -298,7 +298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2554534042317184498, guid: 539b674d1ebcd374dbc4574f0cfaa672, type: 3}
       propertyPath: m_LookaheadSmoothing
-      value: 1
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2633262586819563433, guid: 539b674d1ebcd374dbc4574f0cfaa672, type: 3}
       propertyPath: m_Priority
@@ -685,7 +685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808e52f8734598e4aaceb4aba1d74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.2
+  parallaxFactor: -0.1
 --- !u!1 &1042232844
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,7 +867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808e52f8734598e4aaceb4aba1d74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.1
+  parallaxFactor: -0.03
 --- !u!1001 &1753271689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1128,7 +1128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808e52f8734598e4aaceb4aba1d74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.05
+  parallaxFactor: -0.01
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
