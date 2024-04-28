@@ -52,6 +52,7 @@ public class PlayerHealth : MonoBehaviour, IDamagable
     public void Die()
     {
         Debug.Log("Player has died");
+        UIController.Instance.LoseGame();
     }
 
     public int GetHealth()
