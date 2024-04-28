@@ -18,6 +18,7 @@ public class PlayerLandMovementController : MonoBehaviour
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Collider2D characterEntityCollider;
+    [SerializeField] private Animator animator;
 
     #region Private Variables
     #region Input Variables
@@ -86,7 +87,7 @@ public class PlayerLandMovementController : MonoBehaviour
     private void Move()
     {
         if (disableMovementInput) return;
-        
+        animator.SetBool("IsWalking", true);
         if (disableVelocityReset) 
             rb.velocity = new Vector2(rb.velocity.x + horizontalInput * moveSpeed, rb.velocity.y);
         else
@@ -185,5 +186,10 @@ public class PlayerLandMovementController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         jumpInput = Input.GetButton("Jump");
+
+        if (horizontalInput == 0)
+        {
+            animator.SetBool("IsWalking", false);
+        }
     }
 }

@@ -12,7 +12,8 @@ public enum AttackState
 public class PlayerAttackController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator sliceAnimator;
+    [SerializeField] private Animator playerAnimator;
     [SerializeField] private Collider2D hitbox;
     [SerializeField] private LayerMask enemyLayer;
     [Header("Configuration")]
@@ -29,7 +30,7 @@ public class PlayerAttackController : MonoBehaviour
         {
             Debug.LogError("Hitbox not set in PlayerAttackController");
         }
-        if (animator == null)
+        if (sliceAnimator == null || playerAnimator == null)
         {
             Debug.LogError("Animator not set in PlayerAttackController");
         }
@@ -43,19 +44,19 @@ public class PlayerAttackController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) && attackState == AttackState.Ready)
-        {
-            AimAttackUp();
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && attackState == AttackState.Ready)
-        {
-            AimAttackDown();
-        }
-        else if ((Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S)) || (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)))
-        {
-            if (attackState != AttackState.Ready) return;
-            ResetAim();
-        }
+        // if (Input.GetKeyDown(KeyCode.W) && attackState == AttackState.Ready)
+        // {
+        //     AimAttackUp();
+        // }
+        // else if (Input.GetKeyDown(KeyCode.S) && attackState == AttackState.Ready)
+        // {
+        //     AimAttackDown();
+        // }
+        // else if ((Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S)) || (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)))
+        // {
+        //     if (attackState != AttackState.Ready) return;
+        //     ResetAim();
+        // }
         if (Input.GetKeyDown(KeyCode.Mouse0) && attackState == AttackState.Ready)
         {
             Attack();
@@ -83,7 +84,8 @@ public class PlayerAttackController : MonoBehaviour
     private void Attack()
     {
         // animator.gameObject.SetActive(true);
-        animator.SetTrigger("Slice");
+        sliceAnimator.SetTrigger("Slice");
+        playerAnimator.SetTrigger("Punch");
 
         // check hitbox for any collisions
         Collider2D[] colliders = new Collider2D[20];
@@ -124,7 +126,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void GetClipTimes()
     {
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+        AnimationClip[] clips = sliceAnimator.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips)
         {
             Debug.Log(clip.name + " " + clip.length);

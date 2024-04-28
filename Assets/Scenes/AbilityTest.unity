@@ -3749,6 +3749,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 798932215614991519, guid: 539b674d1ebcd374dbc4574f0cfaa672, type: 3}
+      propertyPath: fishSprite
+      value: 
+      objectReference: {fileID: -1577524653, guid: 68df1f203963caf44af7a2911a977b4d, type: 3}
+    - target: {fileID: 798932215614991519, guid: 539b674d1ebcd374dbc4574f0cfaa672, type: 3}
+      propertyPath: normalSprite
+      value: 
+      objectReference: {fileID: 84419411, guid: 8291fa545bcc2fe4b9627b22cdcfbe18, type: 3}
     - target: {fileID: 2685344479371209380, guid: 539b674d1ebcd374dbc4574f0cfaa672, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.5
