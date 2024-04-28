@@ -15,11 +15,13 @@ public class NPCAIController : MonoBehaviour
 {
     public NPCState npcState = NPCState.Idle;
     [Header("References")]
-    [SerializeField] private Transform target;
+    [SerializeField] protected Transform target;
+    [SerializeField] protected EnemyHealth health;
     [Header("Configuration")]
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float attackRange = 1f;
-    [SerializeField] private float chaseRange = 5f;
+    [SerializeField] protected float speed = 10f;
+    [SerializeField] protected float attackRange = 1f;
+    [SerializeField] protected float chaseRange = 5f;
+    [SerializeField] protected float patrolRange = 5f;
 
     // Start is called before the first frame update
     void Start()
@@ -28,13 +30,13 @@ public class NPCAIController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         HandleStateCheck();
         HandleNPCState();
     }
 
-    private void HandleStateCheck()
+    protected virtual void HandleStateCheck()
     {
         if (Vector2.Distance(transform.position, target.position) <= chaseRange)
         {
@@ -50,7 +52,7 @@ public class NPCAIController : MonoBehaviour
         }
     }
 
-    private void HandleNPCState()
+    protected virtual void HandleNPCState()
     {
         switch (npcState)
         {
@@ -69,7 +71,7 @@ public class NPCAIController : MonoBehaviour
         }
     }
 
-    private void ChaseTarget()
+    protected virtual void ChaseTarget()
     {
         if (target != null)
         {
@@ -80,7 +82,7 @@ public class NPCAIController : MonoBehaviour
         }
     }
 
-    private void AttackTarget()
+    protected virtual void AttackTarget()
     {
         if (target != null)
         {
@@ -88,7 +90,7 @@ public class NPCAIController : MonoBehaviour
         }
     }
 
-    public void SetTarget(Transform newTarget)
+    public virtual void SetTarget(Transform newTarget)
     {
         target = newTarget;
     }
