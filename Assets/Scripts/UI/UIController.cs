@@ -78,6 +78,14 @@ public class UIController : MonoBehaviour
 
     public void GoToNextLevel()
     {
+        // check if next build index is valid
+        // if not, return to main menu
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1 >= UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            return;
+        }
+        
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
     }
 
