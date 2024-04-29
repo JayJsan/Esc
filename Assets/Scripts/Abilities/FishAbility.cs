@@ -5,16 +5,16 @@ using UnityEngine;
 public class FishAbility : MonoBehaviour, IAbility
 {
     [Header("Configuration")]
-    [SerializeField] private float cooldown = 5f;
+    [SerializeField] private float cooldown = 1f;
     [SerializeField] private float duration = 10f;
 
     [Header("Fish Configuration")]
-    [SerializeField] private Sprite fishSprite;
     [SerializeField] private Sprite normalSprite;
 
     [Header("References")]
     [SerializeField] private GameEvent OnFishTransformation;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
+    [SerializeField] private Animator animator;
 
     // ============ Private Variables ============
     private bool isFish = false;
@@ -28,7 +28,7 @@ public class FishAbility : MonoBehaviour, IAbility
     {
         isFish = true;
         OnFishTransformation.Raise(this, isFish);
-        playerSpriteRenderer.sprite = fishSprite;
+        animator.SetBool("IsFish", true);
         StartCoroutine(AbilityTimer());
     }
 
@@ -45,7 +45,7 @@ public class FishAbility : MonoBehaviour, IAbility
     public void Stop()
     {
         isFish = false;
-        playerSpriteRenderer.sprite = normalSprite;
+        animator.SetBool("IsFish", false);
         OnFishTransformation.Raise(this, isFish);
     }
 
