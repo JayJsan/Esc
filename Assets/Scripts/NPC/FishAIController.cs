@@ -9,9 +9,7 @@ public class FishAIController : NPCAIController
     [Header("Mouse Configuration")]
     [SerializeField] private float attackAttemptCooldown = 3f;
     [SerializeField] private float grabWindow = 3f;
-    [SerializeField] private float grabRange = 3f;
     [SerializeField] private float grabSpeed = 20f;
-    [SerializeField] private float cursorSpeed = 10f;
     [SerializeField] private Rigidbody2D rb;
     //
     private bool canAttack = true;
@@ -62,6 +60,8 @@ public class FishAIController : NPCAIController
                 float randomisedGrabSpeed = grabSpeed + Random.Range(0, grabSpeed / 2);
 
                 rb.AddForce(direction * randomisedGrabSpeed, ForceMode2D.Impulse);
+
+                StartCoroutine(GrabWindow());
             }
         }
     }
@@ -84,6 +84,17 @@ protected override void HandleNPCState()
                 break;
         }
     }
+
+    private IEnumerator GrabWindow()
+    {
+        float randomisedGrabWindow = grabWindow + Random.Range(0, grabWindow / 2);
+        isGrabWindow = true;
+        yield return new WaitForSeconds(randomisedGrabWindow);
+        canAttack = false;
+        isGrabWindow = false;
+        StartCoroutine(AttackCooldown());
+    }
+    
     private IEnumerator AttackCooldown()
     {
         inCooldown = true;
@@ -97,7 +108,7 @@ protected override void HandleNPCState()
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (health.IsDead() || !isGrabWindow || inCooldown) return;
+        if (health.IsDead()) return;
 
         if (other.gameObject.CompareTag("Player"))
         {
