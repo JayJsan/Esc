@@ -49,10 +49,14 @@
         "library/": true,
         "obj/": true,
         "Obj/": true,
+<<<<<<< HEAD
+        "ProjectSettings/": true,
+=======
         "Logs/": true,
         "logs/": true,
         "ProjectSettings/": true,
         "UserSettings/": true,
+>>>>>>> prototyping
         "temp/": true,
         "Temp/": true
     },
